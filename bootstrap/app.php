@@ -13,9 +13,10 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         //
-        $middleware->validateCsrfTokens(except: [
-            'api/*', 
-        ]);
+       $middleware->alias([ 
+        'admin'     => \App\Http\Middleware\ApiAdminMiddleware::class, 
+         'livreur' => \App\Http\Middleware\LivreurMiddleware::class,
+    ]); 
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

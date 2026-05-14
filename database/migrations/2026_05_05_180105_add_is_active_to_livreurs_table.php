@@ -11,12 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('clients', function (Blueprint $table) {
-        $table->id();
-        $table->string('nom_complet');
-        $table->string('telephone');
-        $table->string('adresse')->nullable();
-        $table->timestamps();
+        Schema::table('livreurs', function (Blueprint $table) {
+            $table->boolean('is_active')->default(true); // كيكون خدام فالبداية
         });
     }
 
@@ -25,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('clients');
+        Schema::table('livreurs', function (Blueprint $table) {
+            //
+        });
     }
 };

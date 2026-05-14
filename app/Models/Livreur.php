@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Livreur extends Model
 {
-    protected $fillable = ['nom_complet', 'telephone', 'est_disponible','user_id'];
+    protected $fillable = ['nom_complet', 'telephone', 'est_disponible','user_id','zone','solde','rating_avg'];
     public function orders()
 {
     // هادي كتقول لـ Laravel بلي الليفرور يقدر يكون عنده بزاف ديال الطلبيات

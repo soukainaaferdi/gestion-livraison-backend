@@ -9,19 +9,20 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
-    {
-    Schema::table('livreurs', function (Blueprint $table) {
-        $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
+   public function up()
+{
+    Schema::table('orders', function (Blueprint $table) {
+        // كنزيذو حقل boolean كيبدا بـ false (يعني مازال ماتخلصاتش)
+        $table->boolean('is_paid')->default(false)->after('statut');
     });
-    }
+}
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::table('livreurs', function (Blueprint $table) {
+        Schema::table('orders', function (Blueprint $table) {
             //
         });
     }

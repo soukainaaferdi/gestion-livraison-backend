@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('clients', function (Blueprint $table) {
-        $table->id();
-        $table->string('nom_complet');
-        $table->string('telephone');
-        $table->string('adresse')->nullable();
-        $table->timestamps();
+        Schema::table('orders_statut', function (Blueprint $table) {
+            //public function up()
+{
+    DB::statement("ALTER TABLE orders MODIFY COLUMN statut 
+        ENUM('en_attente', 'assigne', 'livre', 'annule', 'retour') 
+        DEFAULT 'en_attente'");
+}
         });
     }
 
@@ -25,6 +26,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('clients');
+        Schema::table('orders_statut', function (Blueprint $table) {
+            //
+        });
     }
 };

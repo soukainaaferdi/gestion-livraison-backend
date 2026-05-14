@@ -9,19 +9,20 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
-    {
-    Schema::table('livreurs', function (Blueprint $table) {
-        $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
+   public function up()
+{
+    Schema::table('orders', function (Blueprint $table) {
+        $table->decimal('prix_marchandise', 8, 2)->default(0)->after('prix_total');
+        $table->decimal('frais_livraison', 8, 2)->default(0)->after('prix_marchandise');
     });
-    }
+}
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::table('livreurs', function (Blueprint $table) {
+        Schema::table('orders', function (Blueprint $table) {
             //
         });
     }
