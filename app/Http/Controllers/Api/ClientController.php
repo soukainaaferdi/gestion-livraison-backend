@@ -11,10 +11,17 @@ class ClientController extends Controller
         return response()->json(Client::all());
     }
     public function store(Request $request) {
+           $user = \App\Models\User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => \Illuminate\Support\Facades\Hash::make($request->password),
+        'role' => 'marchand',
+    ]);
     $client = Client::create([
         'nom_complet' => $request->name, // React كيصيفط name، Laravel كيسجل nom_complet
         'telephone' => $request->phone,
-        'adresse' => $request->address ?? '---'
+        'adresse' => $request->address ?? '---',
+        'user_id' => $user->id,
     ]);
     return response()->json($client, 201);
 }
@@ -53,16 +60,21 @@ public function settlePayment($id)
 
 
 
+
 public function destroy($id)
 {
     try {
         $client = Client::findOrFail($id);
         
-        // خيار 1: تمسح كاع الطلبيات ديالو أولا
-        // $client->orders()->delete(); 
-
-    $client->delete();
-    return response()->json(['message' => 'Marchand supprimé avec succès']);
+        // 1. msa7 l user li mrt9 bih
+        if ($client->user_id) {
+            \App\Models\User::where('id', $client->user_id)->delete();
+        }
+        
+        // 2. msa7 l client
+        $client->delete();
+        
+        return response()->json(['message' => 'Marchand supprimé avec succès']);
     } catch (\Exception $e) {
         return response()->json(['error' => 'Impossible de supprimer ce marchand'], 500);
     }

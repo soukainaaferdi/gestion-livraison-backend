@@ -15,11 +15,17 @@ class OrderController extends Controller
     if ($request->has('client_id')) {
         $query->where('client_id', $request->client_id);
     }
-    return response()->json($query->get());
+    return response()->json($query->orderBy('created_at', 'desc')->get());
 }
+
 //stroe
  public function store(Request $request)
 {
+    if ($request->user()->role === 'marchand') {
+      $client = \App\Models\Client::where('user_id', $request->user()->id)->first();
+      if (!$client) return response()->json(['message' => 'Marchand non trouvé'], 404);
+      $request->merge(['client_id' => $client->id]);
+  }
     $validated = $request->validate([
         'produit' => 'required',
         'destination' => 'required',
@@ -30,7 +36,6 @@ class OrderController extends Controller
         'destinataire_name'=>'required',
         
     ]);
-
     // كنسيفيو كلشي بمرة وحدة
     $order = Order::create($request->all());
     
@@ -124,5 +129,11 @@ public function update(Request $request, $id) {
     $order->update($request->all()); 
     
     return response()->json(['message' => 'Commande mise à jour avec succès', 'order' => $order]);
+}
+public function getMarchandOrders(Request $request) {
+    $user = $request->user();
+    $client = \App\Models\Client::where('user_id', $user->id)->first();
+    if (!$client) return response()->json([], 404);
+    return Order::where('client_id', $client->id)->orderBy('created_at', 'desc')->get();
 }
 }

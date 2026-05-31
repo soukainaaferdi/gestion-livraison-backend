@@ -16,7 +16,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('admin')->group(function () {
         // إدارة الطلبيات (Orders)
         Route::get('/orders', [OrderController::class, 'index']);
-        Route::post('/orders', [OrderController::class, 'store']);
+        // Route::post('/orders', [OrderController::class, 'store']);
         Route::get('/orders/{id}', [OrderController::class, 'show']);
         Route::patch('/orders/{id}', [OrderController::class, 'update']);
         Route::delete('/orders/{id}', [OrderController::class, 'destroy']);
@@ -61,5 +61,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/my-profile/{userId}', [LivreurController::class, 'getByUserId']);
          Route::get('/livreurs/by-user/{userId}', [LivreurController::class, 'getByUserId']); 
     });
+    
 
+});
+Route::middleware(['auth:sanctum', 'marchand'])->group(function () {
+    Route::get('/marchand/commandes', [OrderController::class, 'getMarchandOrders']);
+    // Route::post('/orders', [OrderController::class, 'store']);
+});
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/orders', [OrderController::class, 'store']);
 });
